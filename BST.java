@@ -108,6 +108,10 @@ public class BST<T>{
             size++;
             return root;
         }
+        if(cur.key == K){
+            cur.data = D;
+            return cur;
+        }
         if(cur.key >= K && cur.left == null){
             bstNode<T> n = new bstNode<T> (K, D);
             cur.setLeft(n);

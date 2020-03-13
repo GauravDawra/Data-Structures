@@ -69,6 +69,7 @@ class bstNode<T>{
         this.setNumOfNodes();
     }
 }
+
 public class BST<T>{
     private int size;
     private bstNode<T> root;
@@ -209,13 +210,11 @@ public class BST<T>{
         if(ind<0 || ind > size-1) return 0;
         bstNode<T> cur = root;
         int curSum = (cur.left!=null) ? cur.left.numOfNodes() : 0;
-        // System.out.println(curSum);
         while(cur!=null){
             if(ind == curSum){
                 return cur.key;
             }
             if(ind < curSum){
-                // bstNode<T> parent = cur;
                 cur = cur.left;
                 curSum -= (cur.right!=null) ? cur.right.numOfNodes() + 1 : 1;
             }
@@ -225,6 +224,16 @@ public class BST<T>{
             }
         }
         return 0;
+    }
+
+    public boolean isMapped(int k){
+        bstNode<T> cur = root;
+        while(cur != null){
+            if(cur.key == k) return true;
+            if(cur.key < k) cur = cur.right;
+            else cur = cur.left;
+        }
+        return false;
     }
 
     public void inOrder(bstNode<T> cur){

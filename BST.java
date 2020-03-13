@@ -1,16 +1,16 @@
 class bstNode<T>{
-    int key;
-    T data;
-    int numOfNodes;
-    int maxHeight;
-    bstNode<T> left, right;
-    bstNode(){
+    public int key;
+    public T data;
+    private int numOfNodes;
+    private int maxHeight;
+    public bstNode<T> left, right;
+    public bstNode(){
         key = 0;
         data = null;
         numOfNodes = maxHeight = 1;
         left = right = null;
     }
-    bstNode(int k, T d){
+    public bstNode(int k, T d){
         key = k;
         data = d;
         left = null;
@@ -18,7 +18,7 @@ class bstNode<T>{
         numOfNodes = 1;
         maxHeight=1;
     }
-    bstNode(int k, T d, bstNode<T> l, bstNode<T> r){
+    public bstNode(int k, T d, bstNode<T> l, bstNode<T> r){
         key = k;
         data = d;
         left = l;
@@ -26,39 +26,44 @@ class bstNode<T>{
         numOfNodes = 1;
         maxHeight=1;
     }
-    int max(int a, int b){
+    private int max(int a, int b){
         return (a>b)?a:b;
     }
-    int getMaxHeight(){
+
+    public int maxHeight(){
         return maxHeight;
     }
 
-    int getImbalance(){
+    public int numOfNodes(){
+        return numOfNodes;
+    }
+
+    public int getImbalance(){
         int imb = 0; 
-        if(this.left!=null) imb += this.left.getMaxHeight();
-        if(this.right!=null) imb -= this.right.getMaxHeight();
+        if(this.left!=null) imb += this.left.maxHeight();
+        if(this.right!=null) imb -= this.right.maxHeight();
         return imb;
     }
 
-    void setHeight(){
+    public void setHeight(){
         maxHeight = 1;
-        if(this.left!=null) maxHeight = max(maxHeight, this.left.getMaxHeight() + 1);
-        if(this.right!=null) maxHeight = max(maxHeight, this.right.getMaxHeight() + 1);
+        if(this.left!=null) maxHeight = max(maxHeight, this.left.maxHeight() + 1);
+        if(this.right!=null) maxHeight = max(maxHeight, this.right.maxHeight() + 1);
     }
 
-    void setNumOfNodes(){
+    public void setNumOfNodes(){
         numOfNodes = 1;
         if(this.left!=null) numOfNodes += this.left.numOfNodes;
         if(this.right!=null) numOfNodes += this.right.numOfNodes;
     }
 
-    void setLeft(bstNode<T> x){
+    public void setLeft(bstNode<T> x){
         this.left = x;
         this.setHeight();
         this.setNumOfNodes();
     }
 
-    void setRight(bstNode<T> x){
+    public void setRight(bstNode<T> x){
         this.right = x;
         this.setHeight();
         this.setNumOfNodes();
@@ -67,23 +72,23 @@ class bstNode<T>{
 public class BST<T>{
     private int size;
     private bstNode<T> root;
-    BST(){
+    public BST(){
         size = 0;
         root = null;
     }
-    BST(int []a){
+    public BST(int []a){
         for(int i=0;i<a.length;i++)
-            this.Insert(a[i]);
+            this.insert(a[i]);
     }
-    int size(){
+    public int size(){
         return size;
     }
 
-    bstNode<T> root(){
+    public bstNode<T> root(){
         return root;
     }
 
-    bstNode<T> rightRotate(bstNode<T> cur){
+    private bstNode<T> rightRotate(bstNode<T> cur){
         if(cur.left==null) return cur;
         bstNode<T> t = cur.left;
         bstNode<T> temp = t.right;
@@ -92,7 +97,7 @@ public class BST<T>{
         return t;
     }
 
-    bstNode<T> leftRotate(bstNode<T> cur){
+    private bstNode<T> leftRotate(bstNode<T> cur){
         if(cur.right == null) return cur;
         bstNode<T> t = cur.right;
         bstNode<T> temp = t.left;
@@ -101,7 +106,7 @@ public class BST<T>{
         return t;
     }
 
-    bstNode<T> insertUtil(bstNode<T> cur, int K, T D){
+    private bstNode<T> insertUtil(bstNode<T> cur, int K, T D){
         if(cur == null){
             bstNode<T> n = new bstNode<T> (K, D);
             root = n;
@@ -156,15 +161,15 @@ public class BST<T>{
         return cur;
     }
 
-    void Insert(int K, T D){
+    public void insert(int K, T D){
         root = insertUtil(root, K, D);
     }
 
-    void Insert(int K){
+    public void insert(int K){
         root = insertUtil(root, K, null);
     }
 
-    T get(int k){
+    public T get(int k){
         bstNode<T> cur = root;
         while(cur!=null){
             if(cur.key==k) return cur.data;
@@ -174,7 +179,7 @@ public class BST<T>{
         return null;
     }
 
-    void set(int k, T d){
+    public void set(int k, T d){
         bstNode<T> cur = root;
         while(cur!=null){
             if(cur.key==k) {cur.data = d; return;}
@@ -183,16 +188,16 @@ public class BST<T>{
         }
     }
 
-    int orderOf(int k){
+    public int orderOf(int k){
         int sum = 0;
         bstNode<T> cur = root;
         while(cur!=null){
             if(cur.key==k){
-                sum += (cur.left!=null) ? cur.left.numOfNodes + 1 : 1;
+                sum += (cur.left!=null) ? cur.left.numOfNodes() + 1 : 1;
                 return sum;
             }
             if(cur.key < k){
-                sum += (cur.left!=null) ? cur.left.numOfNodes + 1 : 1;
+                sum += (cur.left!=null) ? cur.left.numOfNodes() + 1 : 1;
                 cur = cur.right;
             }
             else cur = cur.left;
@@ -200,10 +205,10 @@ public class BST<T>{
         return sum;
     }
 
-    int findByOrder(int ind){
+    public int findByOrder(int ind){
         if(ind<0 || ind > size-1) return 0;
         bstNode<T> cur = root;
-        int curSum = (cur.left!=null) ? cur.left.numOfNodes : 0;
+        int curSum = (cur.left!=null) ? cur.left.numOfNodes() : 0;
         // System.out.println(curSum);
         while(cur!=null){
             if(ind == curSum){
@@ -212,38 +217,36 @@ public class BST<T>{
             if(ind < curSum){
                 // bstNode<T> parent = cur;
                 cur = cur.left;
-                curSum -= (cur.right!=null) ? cur.right.numOfNodes + 1 : 1;
+                curSum -= (cur.right!=null) ? cur.right.numOfNodes() + 1 : 1;
             }
             else{
                 cur = cur.right;
-                curSum += (cur.left!=null) ? cur.left.numOfNodes + 1 : 1;
+                curSum += (cur.left!=null) ? cur.left.numOfNodes() + 1 : 1;
             }
         }
         return 0;
     }
 
-    void inOrder(bstNode<T> cur){
+    public void inOrder(bstNode<T> cur){
         if(cur == null) return;
         inOrder(cur.left);
         System.out.println(cur.key);
         inOrder(cur.right);
     }
 
-    void preOrder(bstNode<T> cur){
+    public void preOrder(bstNode<T> cur){
         if(cur == null) return;
         System.out.println(cur.key);
         preOrder(cur.left);
         preOrder(cur.right);
     }
 
-    void postOrder(bstNode<T> cur){
+    public void postOrder(bstNode<T> cur){
         if(cur == null) return;
         postOrder(cur.left);
         postOrder(cur.right);
         System.out.println(cur.key);
     }
-
-
 
     public static void main(String []args){
         

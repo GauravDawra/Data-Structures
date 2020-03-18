@@ -26,6 +26,7 @@ class bstNode<T>{
         numOfNodes = 1;
         maxHeight=1;
     }
+
     private int max(int a, int b){
         return (a>b)?a:b;
     }
@@ -53,8 +54,8 @@ class bstNode<T>{
 
     public void setNumOfNodes(){
         numOfNodes = 1;
-        if(this.left!=null) numOfNodes += this.left.numOfNodes;
-        if(this.right!=null) numOfNodes += this.right.numOfNodes;
+        if(this.left!=null) numOfNodes += this.left.numOfNodes();
+        if(this.right!=null) numOfNodes += this.right.numOfNodes();
     }
 
     public void setLeft(bstNode<T> x){
@@ -72,7 +73,7 @@ class bstNode<T>{
 
 public class BST<T>{
     private int size;
-    private bstNode<T> root;
+    public bstNode<T> root;
     public BST(){
         size = 0;
         root = null;
@@ -169,6 +170,62 @@ public class BST<T>{
     public void insert(int K){
         root = insertUtil(root, K, null);
     }
+    
+    public bstNode<T> deleteUtil(bstNode<T> cur, int k){
+        if(cur == null) return null;
+        if(cur.key < k){
+            cur.setRight(deleteUtil(cur.right, k));
+        }
+        else if(cur.key > k){
+            cur.setLeft(deleteUtil(cur.left, k));
+        }
+        else{
+            if(cur.right == null){
+                return cur.left;
+            }
+            if(cur.left == null) return cur.right;
+            bstNode<T> sub = cur.left;
+            while(sub.right != null){
+                sub = sub.right;
+            }
+            cur.key = sub.key;
+            cur.data = sub.data;
+            bstNode<T> r = deleteUtil(cur.left, sub.key);
+            cur.setLeft(r);
+        }
+        int imb = cur.getImbalance();
+        if(imb<-1){
+            bstNode<T> gt = cur.right;
+            if(gt.right!=null){
+                if(gt.left == null || gt.right.maxHeight() > gt.left.maxHeight())
+                    cur = leftRotate(cur);
+            }
+            else if(gt.right == null || gt.left.maxHeight() > gt.right.maxHeight()) {
+                gt = rightRotate(gt);
+                cur.setRight(gt);
+                cur = leftRotate(cur);
+            }
+        }
+        else if(imb > 1){
+            bstNode<T> gt = cur.left;
+            if(gt.left!=null){
+                if(gt.right == null || gt.left.maxHeight() > gt.right.maxHeight())
+                    cur = rightRotate(cur);
+            }
+            else if( gt.left == null || gt.right.maxHeight() > gt.left.maxHeight()){
+                gt = leftRotate(gt);
+                cur.setLeft(gt);
+                cur = rightRotate(cur);
+            }
+        }
+        cur.setHeight();
+        cur.setNumOfNodes();
+        return cur;
+    }
+
+    void delete(int k){
+        root = deleteUtil(root, k);
+    }
 
     public T get(int k){
         bstNode<T> cur = root;
@@ -184,7 +241,7 @@ public class BST<T>{
         bstNode<T> cur = root;
         while(cur!=null){
             if(cur.key==k) {cur.data = d; return;}
-            if(cur.key<k) cur=cur.right;
+            if(cur.key<k) cur = cur.right;
             else cur = cur.left;
         }
     }

@@ -73,7 +73,7 @@ class bstNode<T>{
 
 public class BST<T>{
     private int size;
-    public bstNode<T> root;
+    private bstNode<T> root;
     public BST(){
         size = 0;
         root = null;
@@ -190,6 +190,7 @@ public class BST<T>{
             }
             cur.key = sub.key;
             cur.data = sub.data;
+            size--;
             bstNode<T> r = deleteUtil(cur.left, sub.key);
             cur.setLeft(r);
         }
@@ -225,7 +226,6 @@ public class BST<T>{
 
     void delete(int k){
         root = deleteUtil(root, k);
-        size--;
     }
 
     public T get(int k){

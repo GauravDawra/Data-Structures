@@ -225,6 +225,7 @@ public class BST<T>{
 
     void delete(int k){
         root = deleteUtil(root, k);
+        size--;
     }
 
     public T get(int k){

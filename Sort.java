@@ -26,7 +26,7 @@ public class Sort{
         }
         return c;
     }
-    public static int[] sort(int []a){
+    public static int[] merge_sort(int []a){
         if(a.length==1) return a;
         int []a1=new int[a.length/2];
         int []a2=new int[a.length - a.length/2];
@@ -37,8 +37,8 @@ public class Sort{
         for(int j=0;j<a.length - a.length/2;j++, i++){
             a2[j]=a[i];
         }
-        a1=sort(a1);
-        a2=sort(a2);
+        a1=merge_sort(a1);
+        a2=merge_sort(a2);
         int []sub=merge(a1, a2);
         return sub;
     }

@@ -65,6 +65,20 @@ public class Sort{
         quick_sort(a, h, i-2);
         quick_sort(a, i, k);
     }
+
+    public static int[] heapSort(int []arr){
+        Heap h = new Heap(Heap.Type.minHeap);
+        h.buildHeap(arr);
+        int[] newArr = new int[arr.length];
+        int i=0;
+        while(i<arr.length){
+            newArr[i] = h.top();
+            h.pop();
+            i++;
+        }
+        return newArr;
+    }
+
     public static void main(String[] args){
         System.out.println("Welcome to the sort class");
     }
